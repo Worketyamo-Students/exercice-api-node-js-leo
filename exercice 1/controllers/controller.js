@@ -80,8 +80,6 @@ deleteBook: (req, res) => {
     res.status(404).json({ error: `Le livre avec l'ID "${id}" n'existe pas` });
   }
 }
-
 };
-
 export default bookController;
 
