@@ -1,12 +1,24 @@
 {
   "books": [
     {
-      "id": 1,
-      "title": "Fahrenheit 451",
-      "author": "Ray Bradbury"
+      "id": "48d36a05-ed99-49c0-ab5f-e74a3f0c648d",
+      "title": "kirikou",
+      "author": "camerounais"
+    },
+    {
+      "id": "cc224655-ed0d-40e4-a32c-27715bea7cf0",
+      "title": "le monde des echecs",
+      "author": "julien song"
+    },
+    {
+      "id": "5d8566a0-9b51-4131-a567-2673854353d0",
+      "title": "la voie du ninja",
+      "author": "kakashi"
+    },
+    {
+      "id": "81f4b2f9-365f-421f-9d88-a02812c1aa2d",
+      "title": "le plus grand general sous les cieux",
+      "author": "kingdom"
     }
-
-   
-   
   ]
 }
