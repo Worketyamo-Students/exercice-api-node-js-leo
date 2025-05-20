@@ -1,6 +1,7 @@
 const crypto=require("crypto")
 const fs=require("fs")
 const path = require("path");
+const os =require('os')
 
 
 
@@ -114,7 +115,20 @@ const contactController = {
      
     },
     getStatus: (req, res) => {
-         res.send("API is running");
+        function readDb() {
+            const data = fs.readFileSync(dbPath, "utf-8");
+            const db = JSON.parse(data);
+            return db;
+        }
+        const db = readDb();
+        const infos = [
+            { version_os: os.version() },
+            { name_os: os.type() },
+            { memoire_libre: os.freemem() },
+            { user_information: os.userInfo() }
+        ];
+        const jsonInfos = JSON.stringify(infos);
+        res.status(200).json(`votre carnet d'adresse compte ${db.length} contacts ${jsonInfos}`);
     }
 };
 
