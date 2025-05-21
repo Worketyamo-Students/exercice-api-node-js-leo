@@ -1,5 +1,19 @@
 {
+  "name": "exercice-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type":"commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon app.js"
+  },
+  "keywords": [],
+  "author": "leonel691",
+  "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "route": "^0.2.5"
   }
 }
