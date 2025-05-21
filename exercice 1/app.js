@@ -9,7 +9,7 @@ app.use(bodyParser.json())
 app.use("/", router)
 
 app.listen(port,(error)=>{
-    if (error) throw error
+
     console.log(`le serveur tourne sur le port ${port}`)
 })
 

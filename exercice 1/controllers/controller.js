@@ -12,7 +12,7 @@ const dbPath = path.join(__dirname, "../database.json");
 
 function readDb() {
   const data = fs.readFileSync(dbPath, 'utf-8');
-  const db = JSON.parse(data || '{}');
+  const db = JSON.parse(data);
   if (!Array.isArray(db.books)) {
     db.books = [];
   }
