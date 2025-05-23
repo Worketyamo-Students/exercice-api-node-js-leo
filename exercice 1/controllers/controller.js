@@ -9,17 +9,29 @@ import { v4 as uuidv4 } from 'uuid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dbPath = path.join(__dirname, "../database.json");
+const csvPath = path.join(__dirname, "../database.csv");
 
 function readDb() {
   const data = fs.readFileSync(dbPath, 'utf-8');
-  const db = JSON.parse(data);
-  if (!Array.isArray(db.books)) {
-    db.books = [];
+  const db = JSON.parse(data || "[]");
+  if (!Array.isArray(db)) {
+    db = [];
   }
   return db;
 }
 function writeDb(data) {
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf-8');
+  syncCSV(data)
+}
+const syncCSV=(book)=>{
+  const csv = ["id,title,author"]
+  .concat(
+    book.map(
+      (book)=>`${book.id},${book.title},${book.author}`
+    )
+  )
+  .join("\n")
+  fs.writeFileSync(csvPath,csv)
 }
 
 const bookController = {
@@ -31,7 +43,7 @@ const bookController = {
     author: req.body.author
     };
 
-    db.books.push(newBook);
+    db.push(newBook);
     writeDb(db);
 
     res.status(201).json(newBook);
@@ -39,12 +51,12 @@ const bookController = {
     // read all
     getAllBooks: (req, res) => {
         const db = readDb();
-        res.json(db.books); 
+        res.json(db); 
 },
 getBookById: (req, res) => {
   const id = req.params.id;
   const db = readDb();
-  const book = db.books.find(objet => objet.id === id);//recherche dans le tableau un objet par son id
+  const book = db.find(objet => objet.id === id);//recherche dans le tableau un objet par son id
   if (book) {
     res.json(book);
   } else {
@@ -54,14 +66,14 @@ getBookById: (req, res) => {
   updateBook: (req, res) => {
     const id = req.params.id;
     const db = readDb();
-    const bookIndex = db.books.findIndex(book => book.id === id);
+    const bookIndex = db.findIndex(book => book.id === id);
     if (bookIndex !== -1) {
       const updatedBook = {
-        ...db.books[bookIndex],
+        ...db[bookIndex],
         ...req.body,
-        id: db.books[bookIndex].id 
+        id: db[bookIndex].id 
       };
-      db.books[bookIndex] = updatedBook;
+      db[bookIndex] = updatedBook;
       writeDb(db);
       res.json(updatedBook);
     } else {
@@ -71,9 +83,9 @@ getBookById: (req, res) => {
 deleteBook: (req, res) => {
   const id = req.params.id;
   const db = readDb();
-  const index = db.books.findIndex(objet => objet.id === id);
+  const index = db.findIndex(objet => objet.id === id);
   if (index !== -1) {
-    db.books.splice(index, 1); // supprime 1 élément à la position `index`
+    db.splice(index, 1); // supprime 1 élément à la position `index`
     writeDb(db);
     res.json({ message: `Le livre avec l'ID ${id} a bien été supprimé`});
   } else {

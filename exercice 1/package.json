@@ -12,6 +12,7 @@
   "author": "leonel691",
   "license": "ISC",
   "dependencies": {
+    "@aternus/csv-to-xlsx": "^2.1.5",
     "express": "^5.1.0",
     "uuid": "^11.1.0"
   }
