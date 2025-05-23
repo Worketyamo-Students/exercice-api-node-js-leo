@@ -3,15 +3,23 @@ const fs = require("fs");
 const path = require("path");
 
 const dbPath = path.join(__dirname, "../database.json");
+const csvPath = path.join(__dirname, "../database.csv");
 
 
 function readDb() {
-    const data = fs.readFileSync(dbPath, "utf-8");
+    const data = fs.existsSync(dbPath) ? fs.readFileSync(dbPath, "utf-8") : "[]";
     return JSON.parse(data);
 }
 
 function writeDb(data) { 
     fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf-8');
+    syncCSV(data)
+}
+function syncCSV(products) {
+    const csv = ["id,name,mark"]
+        .concat(products.map(product => `${product.id},${product.name},${product.mark}`))
+        .join("\n");
+    fs.writeFileSync(csvPath, csv);
 }
 
 const productController = {
