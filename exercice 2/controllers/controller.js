@@ -6,12 +6,22 @@ const os =require('os')
 
 
 const dbPath = path.join(__dirname, "../database.json");
+const csvPath = path.join(__dirname, "../database.csv");
+
+// fonctiond e syncronisation 
+const syncCSV = (contact) => {
+  const csv = ["id,title,author"]
+    .concat(
+      contact.map(
+        (contact) => `${contact.id},${contact.name},${contact.number}`
+      )
+    )
+    .join("\n");
+  fs.writeFileSync(csvPath, csv);
+};
 
 const contactController = {
     createContact: (req, res) => {
-        // Générer un nouvel identifiant unique à chaque création
-        // const myArray = new Uint32Array(1);
-        // crypto.getRandomValues(myArray);
         const identifiant = crypto.randomBytes(4).readUInt16BE(0);
 
         const newContact = {
@@ -29,6 +39,7 @@ const contactController = {
         // Écriture dans la base de données
         function writeDb(data) {
             fs.writeFileSync(dbPath, JSON.stringify(data,null,2), 'utf-8');
+            syncCSV(data)
         }
 
         const db = readDb();
@@ -73,6 +84,7 @@ const contactController = {
 
         function writeDb(data) {
             fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf-8');
+            syncCSV(data)
         }
 
         let db = readDb();
@@ -99,6 +111,7 @@ const contactController = {
         }
         function writeDb(data) {
             fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf-8');
+            syncCSV(data)
         }
         const db = readDb();
         const index = db.findIndex(contact => String(contact.id) === String(id));
@@ -107,8 +120,7 @@ const contactController = {
             db.splice(index, 1);
             writeDb(db);
             console.log("supression de",contact.name,"bien effectué")
-            // res.status(200).json(contact);
-            // res.status(200).json(db)
+            res.status(200).json({ message: `Contact avec l'id ${id} supprimé avec succès`, contact });
         } else {
             res.status(404).json({ error: `le contact dont l'id est ${id} n'existe pas` });
         }
